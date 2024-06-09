@@ -18,7 +18,13 @@
         <div class="col-md-6">
           <div class="card">
             <div class="card-body">
-              <h1 class="h4">Añadir Tarea</h1>
+              <h1 class="h4">Añadir Elemento</h1>
+
+              <div class="btn-group mb-3" role="group" aria-label="Basic example">
+                <button type="button" class="btn btn-secondary" id="btn-tasks">Tareas</button>
+                <button type="button" class="btn btn-secondary" id="btn-pendientes">Pendientes</button>
+                <button type="button" class="btn btn-secondary" id="btn-eventos">Eventos</button>
+              </div>
 
               <form id="task-form">
                 <label for="title">Titulo:</label>
@@ -26,8 +32,7 @@
                   type="text"
                   id="task-title"
                   class="form-control mb-3"
-                  class="My First Title"
-                  placeholder="Titulo de la tarea"
+                  placeholder="Titulo del elemento"
                   autofocus
                 />
 
@@ -36,7 +41,7 @@
                   id="task-description"
                   rows="3"
                   class="form-control mb-3"
-                  placeholder="Descripcion de la Tarea"
+                  placeholder="Descripcion del elemento"
                 ></textarea>
 
                 <button class="btn btn-primary" id="btn-task-form">Guardar</button>
@@ -44,12 +49,15 @@
             </div>
           </div>
         </div>
-        
-        <div class="col-md-6" id="tasks-container"></div>
+
+        <div class="col-md-6">
+          <div id="tasks-container" class="task-container"></div>
+          <div id="pendientes-container" class="task-container d-none"></div>
+          <div id="eventos-container" class="task-container d-none"></div>
+        </div>
       </div>
     </div>
 
-   
     <script src="./app.js" type="module"></script>
   </body>
 </html>

@@ -45,3 +45,35 @@ export const updateTask = (id, newFields) =>
   updateDoc(doc(db, "tarea", id), newFields);
 
 export const getTasks = () => getDocs(collection(db, "tarea"));
+
+// Pendientes
+export const savePendiente = (title, description) =>
+  addDoc(collection(db, "pendientes"), { title, description });
+
+export const onGetPendientes = (callback) =>
+  onSnapshot(collection(db, "pendientes"), callback);
+
+export const deletePendiente = (id) => deleteDoc(doc(db, "pendientes", id));
+
+export const getPendiente = (id) => getDoc(doc(db, "pendientes", id));
+
+export const updatePendiente = (id, newFields) =>
+  updateDoc(doc(db, "pendientes", id), newFields);
+
+export const getPendientes = () => getDocs(collection(db, "pendientes"));
+
+// Eventos
+export const saveEvento = (title, description) =>
+  addDoc(collection(db, "eventos"), { title, description });
+
+export const onGetEventos = (callback) =>
+  onSnapshot(collection(db, "eventos"), callback);
+
+export const deleteEvento = (id) => deleteDoc(doc(db, "eventos", id));
+
+export const getEvento = (id) => getDoc(doc(db, "eventos", id));
+
+export const updateEvento = (id, newFields) =>
+  updateDoc(doc(db, "eventos", id), newFields);
+
+export const getEventos = () => getDocs(collection(db, "eventos"));
