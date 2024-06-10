@@ -26,13 +26,13 @@ const btnPendientes = document.getElementById("btn-pendientes");
 const btnEventos = document.getElementById("btn-eventos");
 
 let editStatus = false;
-let id = "";
+let currentId = "";
 let currentCollection = "tasks";
 
 window.addEventListener("DOMContentLoaded", async () => {
-  loadTasks();
-  loadPendientes();
-  loadEventos();
+  await loadTasks();
+  await loadPendientes();
+  await loadEventos();
 });
 
 btnTasks.addEventListener("click", () => switchCollection("tasks"));
@@ -55,17 +55,16 @@ taskForm.addEventListener("submit", async (e) => {
     }
   } else {
     if (currentCollection === "tasks") {
-      await updateTask(id, { title, description });
+      await updateTask(currentId, { title, description });
     } else if (currentCollection === "pendientes") {
-      await updatePendiente(id, { title, description });
+      await updatePendiente(currentId, { title, description });
     } else if (currentCollection === "eventos") {
-      await updateEvento(id, { title, description });
+      await updateEvento(currentId, { title, description });
     }
     editStatus = false;
-    id = "";
+    currentId = "";
     taskForm["btn-task-form"].innerText = "Guardar";
   }
-
   taskForm.reset();
 });
 
@@ -84,7 +83,7 @@ function switchCollection(collection) {
   }
 }
 
-function loadTasks() {
+async function loadTasks() {
   onGetTasks((querySnapshot) => {
     tasksContainer.innerHTML = "";
     querySnapshot.forEach((doc) => {
@@ -95,7 +94,7 @@ function loadTasks() {
   });
 }
 
-function loadPendientes() {
+async function loadPendientes() {
   onGetPendientes((querySnapshot) => {
     pendientesContainer.innerHTML = "";
     querySnapshot.forEach((doc) => {
@@ -106,7 +105,7 @@ function loadPendientes() {
   });
 }
 
-function loadEventos() {
+async function loadEventos() {
   onGetEventos((querySnapshot) => {
     eventosContainer.innerHTML = "";
     querySnapshot.forEach((doc) => {
@@ -127,7 +126,7 @@ function createCard(id, title, description, type) {
           🗑 Delete
         </button>
         <button class="btn btn-secondary btn-edit" data-id="${id}" data-type="${type}">
-            🖉 Edit
+          🖉 Edit
         </button>
       </div>
     </div>`;
@@ -135,11 +134,8 @@ function createCard(id, title, description, type) {
 
 function attachEventHandlers(type) {
   const container = type === "task" ? tasksContainer : type === "pendiente" ? pendientesContainer : eventosContainer;
-  const btnsDelete = container.querySelectorAll(".btn-delete");
-  const btnsEdit = container.querySelectorAll(".btn-edit");
-
-  btnsDelete.forEach((btn) => {
-    btn.addEventListener("click", async (e) => {
+  container.addEventListener("click", async (e) => {
+    if (e.target.classList.contains("btn-delete")) {
       const id = e.target.dataset.id;
       if (type === "task") {
         await deleteTask(id);
@@ -148,11 +144,7 @@ function attachEventHandlers(type) {
       } else if (type === "evento") {
         await deleteEvento(id);
       }
-    });
-  });
-
-  btnsEdit.forEach((btn) => {
-    btn.addEventListener("click", async (e) => {
+    } else if (e.target.classList.contains("btn-edit")) {
       const id = e.target.dataset.id;
       let doc;
       if (type === "task") {
@@ -168,10 +160,9 @@ function attachEventHandlers(type) {
       taskForm["task-description"].value = data.description;
 
       editStatus = true;
-      id = doc.id;
+      currentId = doc.id;
 
       taskForm["btn-task-form"].innerText = "Actualizar";
-    });
+    }
   });
 }
-
